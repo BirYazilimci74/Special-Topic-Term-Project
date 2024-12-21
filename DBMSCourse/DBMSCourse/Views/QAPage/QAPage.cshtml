@@ -1,0 +1,135 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Question Answering</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .qa-container {
+            background: #ffffff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            padding: 20px;
+            max-width: 600px;
+            width: 90%;
+        }
+
+        .qa-title {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .qa-input-container {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .qa-input {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            font-size: 1em;
+            transition: border-color 0.3s ease;
+        }
+
+            .qa-input:focus {
+                border-color: #007bff;
+                outline: none;
+            }
+
+        .qa-submit-btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            background-color: #007bff;
+            color: white;
+            font-size: 1em;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            text-align: center;
+        }
+
+            .qa-submit-btn:hover {
+                background-color: #0056b3;
+            }
+
+        .qa-response {
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 15px;
+            font-size: 1em;
+            color: #333;
+            min-height: 50px;
+        }
+
+        .qa-response-title {
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .qa-response p {
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="qa-container">
+        <div class="qa-title">Ask Your Question</div>
+        <div class="qa-input-container">
+            <input type="text" id="question" class="qa-input" placeholder="Type your question here...">
+            <button class="qa-submit-btn" onclick="submitQuestion()">Submit</button>
+        </div>
+        <div class="qa-response" id="response">
+            <div class="qa-response-title">Answer:</div>
+            <p id="response">The response will appear here.</p>
+        </div>
+    </div>
+
+    <script>
+        async function askQuestion() {
+            const questionInput = document.getElementById("question");
+            const responseText = document.getElementById("response");
+
+            const question = questionInput.value.trim();
+            if (question === "") {
+                responseText.textContent = "Please enter a question.";
+                return;
+            }
+
+            try {
+                const response = await fetch('/QAPage/AskQuestion', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ question: question })
+                });
+
+                const data = await response.json();
+                if (data.success) {
+                    responseText.textContent = `Answer: ${data.answer}`;
+                } else {
+                    responseText.textContent = `Error: ${data.message}`;
+                }
+            } catch (error) {
+                responseText.textContent = "Error connecting to the server.";
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,226 @@
+﻿@model List<DBMSCourse.Models.Quiz>
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Page</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .quiz-container {
+            background: #ffffff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            padding: 20px;
+            max-width: 500px;
+            width: 90%;
+        }
+
+        .question {
+            font-size: 1.2em;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        .options {
+            list-style-type: none;
+            padding: 0;
+        }
+
+            .options li {
+                margin: 10px 0;
+            }
+
+        .custom-radio {
+            display: flex;
+            align-items: center;
+            background-color: #f9f9f9;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            padding: 10px;
+            cursor: pointer;
+            transition: border-color 0.3s ease, background-color 0.3s ease;
+        }
+
+            .custom-radio:hover {
+                border-color: #007bff;
+                background-color: #eef4ff;
+            }
+
+            .custom-radio input {
+                display: none;
+            }
+
+            .custom-radio span {
+                margin-left: 10px;
+                font-size: 1em;
+                color: #333;
+            }
+
+            .custom-radio input:checked + span {
+                font-weight: bold;
+                color: #007bff;
+            }
+
+                .custom-radio input:checked + span:before {
+                    content: "✔ ";
+                    color: #28a745;
+                    font-weight: bold;
+                }
+
+        .button-container {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+
+        .submit-btn, .skip-btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: background-color 0.3s ease;
+        }
+
+        .submit-btn {
+            background-color: #28a745;
+            color: white;
+        }
+
+            .submit-btn:hover {
+                background-color: #218838;
+            }
+
+        .skip-btn {
+            background-color: #ffc107;
+            color: black;
+        }
+
+            .skip-btn:hover {
+                background-color: #e0a800;
+            }
+
+        .question-container {
+            display: none;
+        }
+
+            .question-container.active {
+                display: block;
+            }
+    </style>
+</head>
+<body>
+    <div class="quiz-container">
+        @for (int i = 0; i < Model.Count; i++)
+        {
+            <div class="question-container" id="question-@i">
+                <div class="question">
+                    @Model[i].QuestionText
+                </div>
+                <ul class="options">
+                    <li>
+                        <label class="custom-radio">
+                            <input type="radio" name="quiz-option-@Model[i].QuestionId" value="@Model[i].AnswerA">
+                            <span>@Model[i].AnswerA</span>
+                        </label>
+                    </li>
+                    <li>
+                        <label class="custom-radio">
+                            <input type="radio" name="quiz-option-@Model[i].QuestionId" value="@Model[i].AnswerB">
+                            <span>@Model[i].AnswerB</span>
+                        </label>
+                    </li>
+                    <li>
+                        <label class="custom-radio">
+                            <input type="radio" name="quiz-option-@Model[i].QuestionId" value="@Model[i].AnswerC">
+                            <span>@Model[i].AnswerC</span>
+                        </label>
+                    </li>
+                    <li>
+                        <label class="custom-radio">
+                            <input type="radio" name="quiz-option-@Model[i].QuestionId" value="@Model[i].AnswerD">
+                            <span>@Model[i].AnswerD</span>
+                        </label>
+                    </li>
+                </ul>
+                <div class="button-container">
+                    <button class="skip-btn" onclick="skipQuestion(@i)">Skip Question</button>
+                    <button class="submit-btn" onclick="submitAnswer(@Model[i].QuestionId, @i)">Submit Answer</button>
+                </div>
+            </div>
+        }
+    </div>
+
+    <script>
+        let currentQuestionIndex = 0;
+
+        function showQuestion(index) {
+            const allQuestions = document.querySelectorAll('.question-container');
+            allQuestions.forEach((q, i) => {
+                q.classList.remove('active');
+                if (i === index) {
+                    q.classList.add('active');
+                }
+            });
+        }
+
+        function submitAnswer(quizId, index) {
+            const selectedOption = document.querySelector(`input[name="quiz-option-${quizId}"]:checked`);
+            if (!selectedOption) {
+                alert("Please select an option.");
+                return;
+            }
+
+            fetch('/QuizPage/CheckAnswer', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    quizId: quizId,
+                    selectedOption: selectedOption.value
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert(data.isCorrect ? "Correct!" : "Incorrect!");
+                } else {
+                    alert("Error: " + data.message);
+                }
+                goToNextQuestion();
+            })
+            .catch(error => console.error('Error:', error));
+        }
+
+        function skipQuestion(index) {
+            alert(`You skipped question ${index + 1}.`);
+            goToNextQuestion();
+        }
+
+        function goToNextQuestion() {
+            currentQuestionIndex++;
+            if (currentQuestionIndex < @Model.Count) {
+                showQuestion(currentQuestionIndex);
+            } else {
+                alert("Quiz Completed!");
+                // You can redirect or display a final result here.
+            }
+        }
+
+        // Initialize the first question
+        showQuestion(currentQuestionIndex);
+    </script>
+</body>
+</html>
