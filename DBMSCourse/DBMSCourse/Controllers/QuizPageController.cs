@@ -16,9 +16,10 @@ namespace DBMSCourse.Controllers
         }
 
         // GET: QuizPage
-        public ActionResult QuizPage()
+        public ActionResult QuizPage(int secitonId)
         {
-            var quizzes = _repository.GetAllQuizzes();
+            var quizzes = _repository.GetQuizzesBySection(secitonId);
+            ViewBag.SectionId = secitonId;
             return View(quizzes);
         }
 

@@ -1,4 +1,7 @@
-﻿@model List<DBMSCourse.Models.Quiz>
+﻿@{
+    var quizzes = Model as List<DBMSCourse.Models.Quiz>;
+    var sectionId = ViewBag.SectionId;
+} 
 
 <!DOCTYPE html>
 <html>
@@ -15,6 +18,7 @@
             justify-content: center;
             align-items: center;
             height: 100vh;
+
         }
 
         .quiz-container {
@@ -122,41 +126,41 @@
 </head>
 <body>
     <div class="quiz-container">
-        @for (int i = 0; i < Model.Count; i++)
+        @for (int i = 0; i < quizzes.Count; i++)
         {
             <div class="question-container" id="question-@i">
                 <div class="question">
-                    @Model[i].QuestionText
+                    @quizzes[i].QuestionText
                 </div>
                 <ul class="options">
                     <li>
                         <label class="custom-radio">
-                            <input type="radio" name="quiz-option-@Model[i].QuestionId" value="@Model[i].AnswerA">
-                            <span>@Model[i].AnswerA</span>
+                            <input type="radio" name="quiz-option-@quizzes[i].QuestionId" value="@quizzes[i].AnswerA">
+                            <span>@quizzes[i].AnswerA</span>
                         </label>
                     </li>
                     <li>
                         <label class="custom-radio">
-                            <input type="radio" name="quiz-option-@Model[i].QuestionId" value="@Model[i].AnswerB">
-                            <span>@Model[i].AnswerB</span>
+                            <input type="radio" name="quiz-option-@quizzes[i].QuestionId" value="@quizzes[i].AnswerB">
+                            <span>@quizzes[i].AnswerB</span>
                         </label>
                     </li>
                     <li>
                         <label class="custom-radio">
-                            <input type="radio" name="quiz-option-@Model[i].QuestionId" value="@Model[i].AnswerC">
-                            <span>@Model[i].AnswerC</span>
+                            <input type="radio" name="quiz-option-@quizzes[i].QuestionId" value="@quizzes[i].AnswerC">
+                            <span>@quizzes[i].AnswerC</span>
                         </label>
                     </li>
                     <li>
                         <label class="custom-radio">
-                            <input type="radio" name="quiz-option-@Model[i].QuestionId" value="@Model[i].AnswerD">
-                            <span>@Model[i].AnswerD</span>
+                            <input type="radio" name="quiz-option-@quizzes[i].QuestionId" value="@quizzes[i].AnswerD">
+                            <span>@quizzes[i].AnswerD</span>
                         </label>
                     </li>
                 </ul>
                 <div class="button-container">
                     <button class="skip-btn" onclick="skipQuestion(@i)">Skip Question</button>
-                    <button class="submit-btn" onclick="submitAnswer(@Model[i].QuestionId, @i)">Submit Answer</button>
+                    <button class="submit-btn" onclick="submitAnswer(@quizzes[i].QuestionId, @i)">Submit Answer</button>
                 </div>
             </div>
         }
@@ -211,7 +215,7 @@
 
         function goToNextQuestion() {
             currentQuestionIndex++;
-            if (currentQuestionIndex < @Model.Count) {
+            if (currentQuestionIndex < @quizzes.Count) {
                 showQuestion(currentQuestionIndex);
             } else {
                 alert("Quiz Completed!");

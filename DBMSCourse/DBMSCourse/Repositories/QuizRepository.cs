@@ -17,6 +17,11 @@ public class QuizRepository
         return _context.Quizzes.ToList();
     }
 
+    public List<Quiz> GetQuizzesBySection(int sectionId)
+    {
+        return _context.Quizzes.Where(q => q.SectionId == sectionId).ToList();
+    }
+
     public Quiz GetQuizById(int id)
     {
         return _context.Quizzes.FirstOrDefault(q => q.QuestionId == id);

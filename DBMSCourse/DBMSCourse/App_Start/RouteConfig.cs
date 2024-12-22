@@ -14,6 +14,12 @@ namespace DBMSCourse
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
 
             routes.MapRoute(
+                name: "HomePage",
+                url: "{controller}/{action}/{id}",
+                defaults: new { controller = "HomePage", action = "HomePage", id = UrlParameter.Optional }
+            );
+
+            routes.MapRoute(
                 name: "QuizPage",
                 url: "{controller}/{action}/{id}",
                 defaults: new { controller = "QuizPage", action = "QuizPage", id = UrlParameter.Optional }

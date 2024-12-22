@@ -8,7 +8,6 @@ namespace DBMSCourse.Controllers
 {
     public class CheckStudentInfoPageController : Controller
     {
-        private readonly SectionRepository _repository = new SectionRepository();
 
         // GET: CheckStudentInfoPage
         public ActionResult CheckStudentInfoPage()

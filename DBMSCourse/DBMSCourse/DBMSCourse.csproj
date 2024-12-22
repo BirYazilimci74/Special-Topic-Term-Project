@@ -241,6 +241,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\CheckStudentInfoPageController.cs" />
+    <Compile Include="Controllers\HomePageController.cs" />
     <Compile Include="Controllers\QAPageController.cs" />
     <Compile Include="Controllers\QuizPageController.cs" />
     <Compile Include="DBMSCourseDBContext.cs" />
@@ -262,6 +263,7 @@
     <Content Include="Views\QuizPage\QuizPage.cshtml" />
     <Content Include="Views\QAPage\QAPage.cshtml" />
     <Content Include="Views\CheckStudentInfoPage\CheckStudentInfoPage.cshtml" />
+    <Content Include="Views\HomePage\HomePage.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
