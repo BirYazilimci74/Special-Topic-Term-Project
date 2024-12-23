@@ -1,4 +1,11 @@
-﻿<!DOCTYPE html>
+﻿@{ 
+    int? sectionId = ViewBag.SectionId;
+    var section = new DBMSCourse.Repositories.SectionRepository(new DBMSCourseDBContext()).GetSectionById(sectionId);
+    var sectionName = section.SectionName;
+    var sectionInfo = section.DetailedInfo;
+}
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -103,8 +110,7 @@
         <div class="info-section">
             <div class="info-title">Detailed Section Information</div>
             <div class="info-content" id="section-info">
-                Here you can write detailed information about the section that the student needs to review.
-                This information will be compared with the student’s input for evaluation.
+                @sectionInfo
             </div>
         </div>
 

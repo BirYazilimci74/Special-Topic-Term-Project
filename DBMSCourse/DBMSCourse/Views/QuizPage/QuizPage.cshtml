@@ -1,6 +1,6 @@
 ﻿@{
-    var quizzes = Model as List<DBMSCourse.Models.Quiz>;
-    var sectionId = ViewBag.SectionId;
+    int? sectionId = ViewBag.SectionId;
+    var quizzes = new DBMSCourse.Repositories.QuizRepository(new DBMSCourseDBContext()).GetQuizzesBySection(sectionId);
 } 
 
 <!DOCTYPE html>

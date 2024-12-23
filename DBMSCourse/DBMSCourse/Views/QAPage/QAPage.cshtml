@@ -1,4 +1,10 @@
-﻿<!DOCTYPE html>
+﻿@{ 
+    int? sectionId = ViewBag.SectionId;
+    var section = new DBMSCourse.Repositories.SectionRepository(new DBMSCourseDBContext()).GetSectionById(sectionId);
+    var sectionName = section.SectionName;
+}
+
+<!DOCTYPE html>
 <html>
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -91,6 +97,7 @@
 </head>
 <body>
     <div class="qa-container">
+        <div class="qa-title">@sectionName</div><br />
         <div class="qa-title">Ask Your Question</div>
         <div class="qa-input-container">
             <input type="text" id="question" class="qa-input" placeholder="Type your question here...">

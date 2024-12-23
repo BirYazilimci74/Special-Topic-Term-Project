@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Web;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace DBMSCourse.Models
 {
@@ -12,10 +8,8 @@ namespace DBMSCourse.Models
         public int ReportId { get; set; }
         public int SectionId { get; set; }
         public Section Section { get; set; }
-        public static double QuizScore { get; set; }
-        public static double KnowladgeCheckScore { get; set; }
-        public double? SectionOverallScore { get; set; } = GetOverall();
-
-        private static double GetOverall() => (QuizScore * 0.3) + (KnowladgeCheckScore * 0.7);
+        public decimal? QuizScore { get; set; } = decimal.Zero;
+        public decimal? KnowledgeCheckScore { get; set; } = decimal.Zero;
+        public decimal? SectionOverallScore { get; set; } = decimal.Zero;
     }
 }

@@ -19,5 +19,15 @@ namespace DBMSCourse.Repositories
         {
             return _dbContext.Sections.ToList();
         }
+
+        public string GetSectionInfoById(int? sectionId)
+        {
+            return _dbContext.Sections.FirstOrDefault(s => s.SectionId == sectionId).DetailedInfo;
+        }
+        
+        public Section GetSectionById(int? sectionId)
+        {
+            return _dbContext.Sections.FirstOrDefault(s => s.SectionId == sectionId);
+        }
     }
 }

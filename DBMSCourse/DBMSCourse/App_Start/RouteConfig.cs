@@ -37,6 +37,11 @@ namespace DBMSCourse
                 defaults: new { controller = "CheckStudentInfoPage", action = "CheckStudentInfoPage", id = UrlParameter.Optional }
             );
 
+            routes.MapRoute(
+                name: "OverallReportPage",
+                url: "{controller}/{action}/{id}",
+                defaults: new { controller = "OverallReportPage", action = "OverallReportPage", id = UrlParameter.Optional }
+            );
         }
     }
 }

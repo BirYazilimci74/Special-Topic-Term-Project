@@ -1,0 +1,125 @@
+﻿@{ 
+    var reports = new DBMSCourse.Repositories.OverallReportRepository(new DBMSCourseDBContext()).GetOverallReports();
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Overall Report</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f9;
+            color: #333;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 800px;
+            margin: 40px auto;
+            background: #ffffff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #007bff;
+            margin-bottom: 20px;
+        }
+
+        .table-container {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            font-size: 1em;
+        }
+
+            table thead {
+                background-color: #007bff;
+                color: white;
+            }
+
+            table th, table td {
+                text-align: left;
+                padding: 12px;
+                border-bottom: 1px solid #ddd;
+            }
+
+            table tr:nth-child(even) {
+                background-color: #f9f9f9;
+            }
+
+            table tr:hover {
+                background-color: #f1f1f1;
+            }
+
+        .score {
+            font-weight: bold;
+        }
+
+        .btn-back {
+            display: inline-block;
+            padding: 10px 20px;
+            margin-top: 20px;
+            background-color: #28a745;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            text-align: center;
+            transition: background-color 0.3s ease;
+        }
+
+            .btn-back:hover {
+                background-color: #218838;
+            }
+
+        .footer {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 0.9em;
+            color: #888;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Overall Report</h1>
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Section</th>
+                        <th>Quiz Score</th>
+                        <th>Knowledge Check Score</th>
+                        <th>Overall Score</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var report in reports)
+                    {
+                        <tr>
+                            <td>@report.Section.SectionName</td>
+                            <td class="score">@report.QuizScore</td>
+                            <td class="score">@report.KnowledgeCheckScore</td>
+                            <td class="score">@report.SectionOverallScore</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        <a href="/" class="btn-back">Back to Home</a>
+    </div>
+    <div class="footer">
+        &copy; @DateTime.Now.Year DBMS Course Report
+    </div>
+</body>
+</html>

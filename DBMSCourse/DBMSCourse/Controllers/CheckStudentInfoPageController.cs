@@ -10,9 +10,9 @@ namespace DBMSCourse.Controllers
     {
 
         // GET: CheckStudentInfoPage
-        public ActionResult CheckStudentInfoPage()
+        public ActionResult CheckStudentInfoPage(int? sectionId)
         {
-            
+            ViewBag.SectionId = sectionId;
             return View();
         }
 

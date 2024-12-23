@@ -93,23 +93,23 @@
             {
                 var secId = section.SectionId;
                 var secName = section.SectionName;
-                <option value=@secId>@secName</option>
+                <option value="@secId">@secName</option>
             }
         </select>
         <button class="nav-button quiz-btn" onclick="navigateTo('QuizPage')">Quiz</button>
-        <button class="nav-button knowledge-btn" onclick="navigateTo('StudentKnowledge')">Student Knowledge</button>
-        <button class="nav-button qa-btn" onclick="navigateTo('QuestionAnswer')">Question & Answer</button>
-        <button class="nav-button score-btn" onclick="navigateTo('OverallScore')">Overall Score</button>
+        <button class="nav-button knowledge-btn" onclick="navigateTo('CheckStudentInfoPage')">Student Knowledge</button>
+        <button class="nav-button qa-btn" onclick="navigateTo('QAPage')">Question & Answer</button>
+        <button class="nav-button score-btn" onclick="navigateTo('OverallReportPage')">Overall Score</button>
     </div>
 
     <script>
         function navigateTo(page) {
             const section = document.getElementById('sectionSelect').value;
-            if (!section) {
+            if (!section && page != "OverallReportPage") {
                 alert('Please select a section.');
                 return;
             }
-            window.location.href = `/${page}/${page}`;
+            window.location.href = `/${page}/${page}?sectionId=${section}`;
         }
     </script>
 </body>

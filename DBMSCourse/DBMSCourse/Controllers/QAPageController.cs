@@ -17,8 +17,9 @@ namespace DBMSCourse.Controllers
         }
 
         // GET: QAPage
-        public ActionResult QAPage()
+        public ActionResult QAPage(int? sectionId)
         {
+            ViewBag.SectionId = sectionId;
             return View();
         }
 
