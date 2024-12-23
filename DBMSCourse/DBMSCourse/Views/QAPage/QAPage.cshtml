@@ -1,7 +1,8 @@
-﻿@{ 
+﻿@{
     int? sectionId = ViewBag.SectionId;
     var section = new DBMSCourse.Repositories.SectionRepository(new DBMSCourseDBContext()).GetSectionById(sectionId);
     var sectionName = section.SectionName;
+    var sectionInfo = section.DetailedInfo;
 }
 
 <!DOCTYPE html>
@@ -97,7 +98,7 @@
 </head>
 <body>
     <div class="qa-container">
-        <div class="qa-title">@sectionName</div><br />
+        <div class="qa-title">@sectionName</div>
         <div class="qa-title">Ask Your Question</div>
         <div class="qa-input-container">
             <input type="text" id="question" class="qa-input" placeholder="Type your question here...">
@@ -110,33 +111,36 @@
     </div>
 
     <script>
-        async function askQuestion() {
-            const questionInput = document.getElementById("question");
-            const responseText = document.getElementById("response");
+    async function submitQuestion() {
+        const question = document.getElementById('question').value;
+        const sectionId = @ViewBag.SectionId;
 
-            const question = questionInput.value.trim();
-            if (question === "") {
-                responseText.textContent = "Please enter a question.";
-                return;
-            }
-
-            try {
-                const response = await fetch('/QAPage/AskQuestion', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ question: question })
-                });
-
-                const data = await response.json();
-                if (data.success) {
-                    responseText.textContent = `Answer: ${data.answer}`;
-                } else {
-                    responseText.textContent = `Error: ${data.message}`;
-                }
-            } catch (error) {
-                responseText.textContent = "Error connecting to the server.";
-            }
+        if (!question) {
+            alert('Please enter a question.');
+            return;
         }
+
+        try {
+            const response = await fetch('@Url.Action("SubmitQuestion", "QAPage")', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ sectionId, question })
+            });
+
+            const result = await response.json();// TODO: answer controller dan buraya geçemiyor
+
+            if (result.success) {
+                document.getElementById('response').textContent = result.answer;
+            } else {
+                document.getElementById('response').textContent = 'Error: ' + result.message;
+            }
+        } catch (error) {
+            document.getElementById('response').textContent = 'Error: Unable to connect to the server.';
+        }
+    }
     </script>
+
 </body>
 </html>

@@ -1,4 +1,5 @@
-﻿using System.Net.Http;
+﻿using System;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web.Mvc;
@@ -8,14 +9,6 @@ namespace DBMSCourse.Controllers
 {
     public class QAPageController : Controller
     {
-        private readonly HttpClient _httpClient;
-
-        public QAPageController()
-        {
-            // HttpClient, API çağrıları için kullanılır.
-            _httpClient = new HttpClient();
-        }
-
         // GET: QAPage
         public ActionResult QAPage(int? sectionId)
         {
@@ -24,39 +17,58 @@ namespace DBMSCourse.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> AskQuestion(string question)
+        public async Task<JsonResult> SubmitQuestion(int sectionId, string question)
         {
-            if (string.IsNullOrEmpty(question))
-            {
-                return Json(new { success = false, message = "Question cannot be empty." });
-            }
-
-            var apiUrl = "http://localhost:5000/api/ask"; // Python API'nizin adresini buraya yazın.
-
             try
             {
-                // Soru verisini JSON formatına dönüştür.
-                var payload = JsonConvert.SerializeObject(new { question = question });
-                var content = new StringContent(payload, Encoding.UTF8, "application/json");
+                // Section bilgilerini veritabanından çek
+                var sectionRepo = new DBMSCourse.Repositories.SectionRepository(new DBMSCourseDBContext());
+                var section = sectionRepo.GetSectionById(sectionId);
 
-                // Python API'sine POST isteği gönder.
-                var response = await _httpClient.PostAsync(apiUrl, content);
-
-                if (response.IsSuccessStatusCode)
+                if (section == null)
                 {
-                    // API cevabını işle.
-                    var responseBody = await response.Content.ReadAsStringAsync();
-                    var result = JsonConvert.DeserializeObject<dynamic>(responseBody);
-                    return Json(new { success = true, answer = result?.answer });
+                    return Json(new { success = false, message = "Section not found." });
                 }
-                else
+
+                // Python API'sine gönderilecek JSON oluştur
+                var payload = new
                 {
-                    return Json(new { success = false, message = "API error: " + response.ReasonPhrase });
+                    question = question,
+                    sectionInfo = section.DetailedInfo
+                };
+
+                var jsonPayload = JsonConvert.SerializeObject(payload);
+
+                using (var client = new HttpClient())
+                {
+                    client.BaseAddress = new Uri("http://127.0.0.1:5000/api/answer"); // Python API URL
+                    var content = new StringContent(jsonPayload, Encoding.UTF8, "application/json");
+
+                    // Python API'ye POST isteği gönder
+                    var response = await client.PostAsync("", content);
+
+                    if (!response.IsSuccessStatusCode)
+                    {
+                        return Json(new { success = false, message = "Failed to communicate with Python API." });
+                    }
+
+                    // Python API'den dönen cevabı al
+                    var result = await response.Content.ReadAsStringAsync();
+                    var apiResponse = JsonConvert.DeserializeObject<dynamic>(result);
+
+                    if ((bool)apiResponse.success)
+                    {
+                        return Json(new { success = true, answer = apiResponse.answer });
+                    }
+                    else
+                    {
+                        return Json(new { success = false, message = apiResponse.message.ToString() });
+                    }
                 }
             }
-            catch
+            catch (Exception ex)
             {
-                return Json(new { success = false, message = "Failed to connect to the API." });
+                return Json(new { success = false, message = ex.Message });
             }
         }
     }
