@@ -12,7 +12,7 @@ namespace DBMSCourse.Controllers
 
         public QuizPageController()
         {
-            _repository = new QuizRepository(new DBMSCourseDBContext());
+            _repository = new QuizRepository(new DBMSCourseContext());
         }
 
         // GET: QuizPage

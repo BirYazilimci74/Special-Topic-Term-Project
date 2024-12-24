@@ -1,6 +1,7 @@
 ﻿@{
     int? sectionId = ViewBag.SectionId;
-    var quizzes = new DBMSCourse.Repositories.QuizRepository(new DBMSCourseDBContext()).GetQuizzesBySection(sectionId);
+    var quizzes = new DBMSCourse.Repositories.QuizRepository(new DBMSCourseContext()).GetQuizzesBySection(sectionId);
+    var numberOfCorrectAnswers = 0;
 } 
 
 <!DOCTYPE html>
@@ -200,12 +201,17 @@
             .then(data => {
                 if (data.success) {
                     alert(data.isCorrect ? "Correct!" : "Incorrect!");
+                    if (data.isCorrect) {
+                        numberOfCorrectAnswers++;
+                    }
                 } else {
                     alert("Error: " + data.message);
                 }
                 goToNextQuestion();
             })
             .catch(error => console.error('Error:', error));
+
+            //TODO: Database e gönderme işlemi yapılacak.
         }
 
         function skipQuestion(index) {
@@ -219,11 +225,9 @@
                 showQuestion(currentQuestionIndex);
             } else {
                 alert("Quiz Completed!");
-                // You can redirect or display a final result here.
             }
         }
 
-        // Initialize the first question
         showQuestion(currentQuestionIndex);
     </script>
 </body>

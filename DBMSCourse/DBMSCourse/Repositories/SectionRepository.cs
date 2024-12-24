@@ -8,9 +8,9 @@ namespace DBMSCourse.Repositories
 {
     public class SectionRepository
     {
-        private readonly DBMSCourseDBContext _dbContext;
+        private readonly DBMSCourseContext _dbContext;
 
-        public SectionRepository(DBMSCourseDBContext context)
+        public SectionRepository(DBMSCourseContext context)
         {
             _dbContext = context;
         }

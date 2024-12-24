@@ -7,9 +7,9 @@ namespace DBMSCourse.Repositories
 {
     public class QuizRepository
     {
-        private readonly DBMSCourseDBContext _context;
+        private readonly DBMSCourseContext _context;
 
-        public QuizRepository(DBMSCourseDBContext context)
+        public QuizRepository(DBMSCourseContext context)
         {
             _context = context;
         }

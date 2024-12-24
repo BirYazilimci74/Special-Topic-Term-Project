@@ -1,6 +1,6 @@
 ﻿@{ 
     int? sectionId = ViewBag.SectionId;
-    var section = new DBMSCourse.Repositories.SectionRepository(new DBMSCourseDBContext()).GetSectionById(sectionId);
+    var section = new DBMSCourse.Repositories.SectionRepository(new DBMSCourseContext()).GetSectionById(sectionId);
     var sectionName = section.SectionName;
     var sectionInfo = section.DetailedInfo;
 }

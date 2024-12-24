@@ -8,8 +8,8 @@ namespace DBMSCourse.Repositories
 {
     public class OverallReportRepository
     {
-        private readonly DBMSCourseDBContext _dbContext;
-        public OverallReportRepository(DBMSCourseDBContext dBContext)
+        private readonly DBMSCourseContext _dbContext;
+        public OverallReportRepository(DBMSCourseContext dBContext)
         { 
             _dbContext = dBContext;
         }

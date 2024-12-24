@@ -22,7 +22,7 @@ namespace DBMSCourse.Controllers
             try
             {
                 // Section bilgilerini veritabanından çek
-                var sectionRepo = new DBMSCourse.Repositories.SectionRepository(new DBMSCourseDBContext());
+                var sectionRepo = new DBMSCourse.Repositories.SectionRepository(new DBMSCourseContext());
                 var section = sectionRepo.GetSectionById(sectionId);
 
                 if (section == null)
