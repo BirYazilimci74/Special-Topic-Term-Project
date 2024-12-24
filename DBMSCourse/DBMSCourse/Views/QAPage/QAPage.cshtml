@@ -129,7 +129,7 @@
                 body: JSON.stringify({ sectionId, question })
             });
 
-            const result = await response.json();// TODO: answer controller dan buraya geçemiyor
+            const result = await response.json();
 
             if (result.success) {
                 document.getElementById('response').textContent = result.answer;

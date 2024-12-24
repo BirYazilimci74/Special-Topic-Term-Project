@@ -56,13 +56,17 @@ namespace DBMSCourse.Controllers
                     var result = await response.Content.ReadAsStringAsync();
                     var apiResponse = JsonConvert.DeserializeObject<dynamic>(result);
 
-                    if ((bool)apiResponse.success)
+                    string answer = apiResponse.answer;
+                    bool success = apiResponse.success;
+                    string message = apiResponse.message;
+                    
+                    if (success)
                     {
-                        return Json(new { success = true, answer = apiResponse.answer });
+                        return Json(new { success, answer });
                     }
                     else
                     {
-                        return Json(new { success = false, message = apiResponse.message.ToString() });
+                        return Json(new { success, message });
                     }
                 }
             }
