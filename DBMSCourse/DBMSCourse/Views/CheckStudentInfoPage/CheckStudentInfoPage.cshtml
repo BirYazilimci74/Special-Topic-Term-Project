@@ -109,9 +109,7 @@
         <!-- Detailed Section Information -->
         <div class="info-section">
             <div class="info-title">@sectionName</div>
-            <div class="info-content" id="section-info">
-                @sectionInfo
-            </div>
+            <div class="info-content" id="section-info">@sectionInfo</div>
         </div>
 
         <!-- Student Input Area -->
@@ -133,8 +131,8 @@
     <script>
         async function checkKnowledge() {
             const studentInput = document.getElementById("student-input").value.trim();
-            const sectionInfo = document.getElementById("section-info").textContent;
             const resultElement = document.getElementById("evaluation-result");
+            const sectionInfo = document.getElementById("section-info").textContent;
 
             if (!studentInput) {
                 resultElement.textContent = "Please enter your knowledge before submitting.";
@@ -143,7 +141,7 @@
             }
 
             try {
-                const response = await fetch('/CheckStudentInfoPage/EvaluateKnowledge', {
+                const response = await fetch('/CheckStudentInfoPage/GetOverallScore', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
@@ -155,7 +153,7 @@
                 const data = await response.json();
 
                 if (data.success) {
-                    resultElement.textContent = `Score: ${data.score}/100 - ${data.message}`;
+                    resultElement.textContent = `Score: ${data.score}/100`;
                     resultElement.style.color = "#007BFF";
                 } else {
                     resultElement.textContent = `Error: ${data.message}`;

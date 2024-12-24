@@ -3,6 +3,9 @@ using System;
 using System.Web.Mvc;
 using Newtonsoft.Json;
 using DBMSCourse.Repositories;
+using System.Net.Http;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace DBMSCourse.Controllers
 {
@@ -18,38 +21,58 @@ namespace DBMSCourse.Controllers
 
         // POST: GetOverallScore
         [HttpPost]
-        public JsonResult GetOverallScore(EvaluationRequest request)
+        public async Task<JsonResult> GetOverallScore(EvaluationRequest request)
         {
-            if (string.IsNullOrEmpty(request.StudentInput) || string.IsNullOrEmpty(request.SectionInfo))
+            try
             {
-                return Json(new { success = false, message = "Both student input and section information are required." });
+                if (string.IsNullOrEmpty(request.StudentInput) || string.IsNullOrEmpty(request.SectionInfo))
+                {
+                    return Json(new { success = false, message = "Both student input and section information are required." });
+                }
+
+                var payload = new
+                {
+                    studentInput = request.StudentInput,
+                    sectionInfo = request.SectionInfo
+                };
+
+                var jsonPayload = JsonConvert.SerializeObject(payload);
+
+                using (var client = new HttpClient())
+                {
+                    client.BaseAddress = new Uri("http://127.0.0.1:5000/api/similarityScore");
+                    var content = new StringContent(jsonPayload, Encoding.UTF8, "application/json");
+
+                    var respons = await client.PostAsync("", content);
+
+                    if (!respons.IsSuccessStatusCode)
+                    {
+                        return Json(new { success = false, message = "Failed to communicate with Python API." });
+                    }
+
+                    var result = await respons.Content.ReadAsStringAsync();
+                    var apiRespose = JsonConvert.DeserializeObject<dynamic>(result);
+
+                    string score = apiRespose.similarityScore;
+                    bool success = apiRespose.success;
+                    string message = apiRespose.message;
+
+                    if (success)
+                    {
+                        return Json(new { success, score });
+                    }
+                    else
+                    {
+                        return Json(new { success, message });
+                    }
+                }
             }
-
-            int score = CalculateOverallScore(request.StudentInput, request.SectionInfo);
-            string feedbackMessage = GenerateFeedbackMessage(score);
-
-            return Json(new { success = true, overallScore = score, feedback = feedbackMessage });
+            catch (Exception ex)
+            {
+                return Json(new { success = false, error = ex.Message });
+            }
         }
 
-        private int CalculateOverallScore(string studentInput, string sectionInfo)
-        {
-            var inputWords = studentInput.Split(new[] { ' ', ',', '.', ';', ':', '\n' }, StringSplitOptions.RemoveEmptyEntries);
-            var sectionWords = sectionInfo.Split(new[] { ' ', ',', '.', ';', ':', '\n' }, StringSplitOptions.RemoveEmptyEntries);
-
-            int matches = inputWords.Count(word => sectionWords.Contains(word, StringComparer.OrdinalIgnoreCase));
-            int totalWords = sectionWords.Length;
-
-            return (int)(((double)matches / totalWords) * 100);
-        }
-
-        private string GenerateFeedbackMessage(int score)
-        {
-            if (score > 80)
-                return "Excellent understanding of the section!";
-            if (score > 50)
-                return "Good understanding, but there are areas to improve.";
-            return "You need to study this section more carefully.";
-        }
     }
 
     public class EvaluationRequest
