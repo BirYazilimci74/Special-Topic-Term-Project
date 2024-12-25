@@ -1,0 +1,40 @@
+{
+    "2": [
+        "A Database Management System (DBMS) is software designed to store, retrieve, manage, and manipulate data in a structured manner",
+        "It replaces traditional file systems by addressing issues such as data redundancy, inconsistency, and lack of scalability",
+        "A DBMS provides several key features, including data abstraction, data independence, and support for multiple users",
+        "It consists of components like the database engine, which processes queries, and the storage manager, which handles the organization of data on physical storage",
+        "Real-world applications include inventory management systems, customer relationship management (CRM) tools, and banking systems",
+        "By understanding the role and components of a DBMS, one can appreciate its importance in managing large-scale data efficiently"
+    ],
+    "3": [
+        "The relational model represents data in the form of tables, known as relations, which consist of rows (tuples) and columns (attributes)",
+        "Each table has a primary key that uniquely identifies its rows, and foreign keys establish relationships between different tables",
+        "This model ensures data consistency and eliminates redundancy by organizing information into logically related tables",
+        "Operations such as selection, projection, and join allow for efficient data retrieval and manipulation",
+        "The relational model also enforces constraints like entity integrity, which ensures no null values in primary keys, and referential integrity, \n    which maintains valid relationships between tables",
+        "Understanding the relational model is fundamental to designing structured and scalable databases"
+    ],
+    "4": [
+        "Structured Query Language (SQL) is the standard language used to interact with relational databases",
+        "It provides commands for data definition, manipulation, and querying",
+        "For example, the CREATE TABLE statement defines the structure of a database table, while INSERT, UPDATE, and DELETE allow for modifying data",
+        "The SELECT statement is used to query data, with additional clauses like WHERE for filtering, GROUP BY for aggregation, and ORDER BY for sorting",
+        "SQL also supports joins, enabling the combination of data from multiple tables",
+        "Mastery of SQL is essential for working with relational databases, as it allows users to extract meaningful insights and manage data effectively"
+    ],
+    "5": [
+        "Normalization is the process of organizing database tables to reduce redundancy and improve data integrity",
+        "It involves dividing a database into smaller, related tables and defining relationships between them",
+        "The process is guided by normal forms, such as the First Normal Form (1NF), which eliminates duplicate columns; \n    the Second Normal Form (2NF), which removes partial dependencies; and the Third Normal Form (3NF), which eliminates transitive dependencies",
+        "By normalizing a database, one can ensure that it is free from update, delete, and insert anomalies",
+        "Although normalization improves efficiency and consistency, it may sometimes require denormalization for performance optimization in certain applications"
+    ],
+    "6": [
+        "Transactions are sequences of database operations treated as a single unit of work",
+        "They adhere to the ACID properties: Atomicity ensures all operations are completed or none are applied; \n    Consistency guarantees the database remains in a valid state; Isolation prevents concurrent transactions from interfering with each other; \n    and Durability ensures changes are permanent even in case of a failure",
+        "Concurrency control mechanisms, such as locking and timestamps, are used to manage simultaneous access to the database",
+        "Common issues include dirty reads, where a transaction reads uncommitted data, and deadlocks, \n    where two transactions wait indefinitely for resources held by each other",
+        "Effective transaction management ensures data integrity and system reliability in multi-user environments"
+    ]
+}

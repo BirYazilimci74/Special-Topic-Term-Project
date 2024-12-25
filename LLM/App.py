@@ -2,6 +2,7 @@ from flask import Flask, request, jsonify
 
 from question_answering import generateAnswer
 from similarity import calculateSimilarityScore
+from evolation_with_rules import evaluate_student_input
 
 app = Flask(__name__)
 
@@ -38,13 +39,15 @@ def calculate_similarity():
         data = request.get_json()
 
         studentInput = data.get('studentInput')
-        sectionInfo = data.get('sectionInfo')
+        sectionId = data.get('sectionId')
 
-        if not studentInput or not sectionInfo:
+        if not studentInput or not sectionId:
             return jsonify({"success": False, "message": "Invalid input data."}), 400
 
         # Modeli Kullanarak benzerliği hesapla
-        score = calculateSimilarityScore(sectionInfo,studentInput)
+
+        #score = calculateSimilarityScore(sectionInfo,studentInput)
+        score = evaluate_student_input(sectionId=sectionId,student_input=studentInput)
         score = round(score, 2)
 
         return jsonify({"success": True, "similarityScore": score})

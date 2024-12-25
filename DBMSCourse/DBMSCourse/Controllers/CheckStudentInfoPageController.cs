@@ -31,7 +31,7 @@ namespace DBMSCourse.Controllers
         {
             try
             {
-                if (string.IsNullOrEmpty(request.StudentInput) || string.IsNullOrEmpty(request.SectionInfo))
+                if (string.IsNullOrEmpty(request.StudentInput) || string.IsNullOrEmpty(request.SectionId))
                 {
                     return Json(new { success = false, message = "Both student input and section information are required." });
                 }
@@ -39,7 +39,7 @@ namespace DBMSCourse.Controllers
                 var payload = new
                 {
                     studentInput = request.StudentInput,
-                    sectionInfo = request.SectionInfo
+                    sectionId = request.SectionId
                 };
 
                 var jsonPayload = JsonConvert.SerializeObject(payload);
@@ -106,7 +106,7 @@ namespace DBMSCourse.Controllers
         [JsonProperty("studentInput")]
         public string StudentInput { get; set; }
 
-        [JsonProperty("sectionInfo")]
-        public string SectionInfo { get; set; }
+        [JsonProperty("sectionId")]
+        public string SectionId { get; set; }
     }
 }

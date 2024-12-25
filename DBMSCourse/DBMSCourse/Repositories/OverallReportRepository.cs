@@ -30,9 +30,8 @@ namespace DBMSCourse.Repositories
 
             reportToUpdate.QuizScore = updatedReport?.QuizScore ?? reportToUpdate.QuizScore;
             reportToUpdate.KnowledgeCheckScore = updatedReport?.KnowledgeCheckScore ?? reportToUpdate.KnowledgeCheckScore;
-            
-            decimal? overallScore = (reportToUpdate.QuizScore * Convert.ToDecimal(0.3)) + (reportToUpdate.KnowledgeCheckScore * Convert.ToDecimal(0.7));
 
+            decimal? overallScore = (reportToUpdate.QuizScore * Convert.ToDecimal(0.3)) + (reportToUpdate.KnowledgeCheckScore * Convert.ToDecimal(0.7));
             reportToUpdate.SectionOverallScore = overallScore;
 
             _dbContext.SaveChanges();
