@@ -1,6 +1,6 @@
 from sentence_transformers import SentenceTransformer, util
 
-def calculate_similarityScore(lesson_content, student_input):
+def calculateSimilarityScore(lesson_content, student_input):
     # SBERT modelini yükle
     model = SentenceTransformer('all-MiniLM-L6-v2')  # Hızlı ve hafif bir model
 

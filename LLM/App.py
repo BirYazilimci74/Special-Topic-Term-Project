@@ -1,11 +1,9 @@
 from flask import Flask, request, jsonify
 
 from question_answering import generateAnswer
-from similarity import calculate_similarityScore
+from similarity import calculateSimilarityScore
 
 app = Flask(__name__)
-
-
 
 
 # REST API for QA
@@ -46,7 +44,7 @@ def calculate_similarity():
             return jsonify({"success": False, "message": "Invalid input data."}), 400
 
         # Modeli Kullanarak benzerliği hesapla
-        score = calculate_similarityScore(sectionInfo,studentInput)
+        score = calculateSimilarityScore(sectionInfo,studentInput)
         score = round(score, 2)
 
         return jsonify({"success": True, "similarityScore": score})

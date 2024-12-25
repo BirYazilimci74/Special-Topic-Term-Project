@@ -1,7 +1,9 @@
 ﻿@{
     int? sectionId = ViewBag.SectionId;
-    var quizzes = new DBMSCourse.Repositories.QuizRepository(new DBMSCourseContext()).GetQuizzesBySection(sectionId);
-    var numberOfCorrectAnswers = 0;
+    var context = new DBMSCourseContext();
+    var quizRepository = new DBMSCourse.Repositories.QuizRepository(context);
+    var reportRepository = new DBMSCourse.Repositories.OverallReportRepository(context);
+    var quizzes = quizRepository.GetQuizzesBySection(sectionId);
 } 
 
 <!DOCTYPE html>
@@ -19,7 +21,6 @@
             justify-content: center;
             align-items: center;
             height: 100vh;
-
         }
 
         .quiz-container {
@@ -124,6 +125,7 @@
                 display: block;
             }
     </style>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 </head>
 <body>
     <div class="quiz-container">
@@ -169,6 +171,7 @@
 
     <script>
         let currentQuestionIndex = 0;
+        let numberOfCorrectAnswer = 0;
 
         function showQuestion(index) {
             const allQuestions = document.querySelectorAll('.question-container');
@@ -176,6 +179,27 @@
                 q.classList.remove('active');
                 if (i === index) {
                     q.classList.add('active');
+                }
+            });
+        }
+
+        function updateCorrectAnswerCount(sectionId, numberOfCorrectAnswer) {
+            $.ajax({
+                url: '/QuizPage/UpdateCorrectAnswerCount',
+                type: 'POST',
+                data: {
+                    sectionId: sectionId,
+                    numberOfCorrectAnswer: numberOfCorrectAnswer
+                },
+                success: function (response) {
+                    if (response.success) {
+                        console.log("Correct answer count updated successfully.");
+                    } else {
+                        console.error("Failed to update correct answer count:", response.message);
+                    }
+                },
+                error: function (error) {
+                    console.error("Error while updating correct answer count:", error);
                 }
             });
         }
@@ -202,7 +226,8 @@
                 if (data.success) {
                     alert(data.isCorrect ? "Correct!" : "Incorrect!");
                     if (data.isCorrect) {
-                        numberOfCorrectAnswers++;
+                        numberOfCorrectAnswer++
+                        updateCorrectAnswerCount(@sectionId, numberOfCorrectAnswer);
                     }
                 } else {
                     alert("Error: " + data.message);
@@ -210,8 +235,6 @@
                 goToNextQuestion();
             })
             .catch(error => console.error('Error:', error));
-
-            //TODO: Database e gönderme işlemi yapılacak.
         }
 
         function skipQuestion(index) {

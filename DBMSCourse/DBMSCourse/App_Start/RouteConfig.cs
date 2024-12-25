@@ -26,11 +26,17 @@ namespace DBMSCourse
                 url: "{controller}/{action}/{id}",
                 defaults: new { controller = "QAPage", action = "QAPage", id = UrlParameter.Optional }
             );
-
+            
             routes.MapRoute(
                 name: "QAPageSubmitQuestion",
                 url: "{controller}/{action}/{id}",
                 defaults: new { controller = "QAPage", action = "SubmitQuestion", id = UrlParameter.Optional }
+            );
+
+            routes.MapRoute(
+                name: "QAPageUpdateCorrectAnswerCount",
+                url: "{controller}/{action}/{id}",
+                defaults: new { controller = "QAPage", action = "UpdateCorrectAnswerCount", id = UrlParameter.Optional }
             );
 
             routes.MapRoute(
