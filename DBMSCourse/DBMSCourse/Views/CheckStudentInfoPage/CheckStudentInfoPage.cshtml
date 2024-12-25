@@ -103,6 +103,7 @@
             color: #007BFF;
         }
     </style>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 </head>
 <body>
     <div class="container">
@@ -133,7 +134,8 @@
             const studentInput = document.getElementById("student-input").value.trim();
             const resultElement = document.getElementById("evaluation-result");
             const sectionInfo = document.getElementById("section-info").textContent;
-
+            const sectionId = @sectionId;
+            
             if (!studentInput) {
                 resultElement.textContent = "Please enter your knowledge before submitting.";
                 resultElement.style.color = "red";
@@ -155,6 +157,17 @@
                 if (data.success) {
                     resultElement.textContent = `Score: ${data.score}/100`;
                     resultElement.style.color = "#007BFF";
+
+                    // Skoru veritabanına kaydet
+                    await fetch('/CheckStudentInfoPage/UpdateStudentScore', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            sectionId: parseInt(sectionId), // Doğru tipte gönderildiğine emin ol
+                            score: parseFloat(data.score)
+                        })
+                    });
+                    
                 } else {
                     resultElement.textContent = `Error: ${data.message}`;
                     resultElement.style.color = "red";
@@ -164,6 +177,7 @@
                 resultElement.style.color = "red";
             }
         }
+
     </script>
 </body>
 </html>

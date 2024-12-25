@@ -1,16 +1,22 @@
-﻿using System.Linq;
-using System;
+﻿using System;
 using System.Web.Mvc;
 using Newtonsoft.Json;
-using DBMSCourse.Repositories;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using DBMSCourse.Repositories;
+using System.Runtime.Remoting.Contexts;
 
 namespace DBMSCourse.Controllers
 {
     public class CheckStudentInfoPageController : Controller
     {
+        private readonly OverallReportRepository _overallReportRepository;
+
+        public CheckStudentInfoPageController()
+        {
+            _overallReportRepository = new OverallReportRepository(new DBMSCourseContext());
+        }
 
         // GET: CheckStudentInfoPage
         public ActionResult CheckStudentInfoPage(int? sectionId)
@@ -73,6 +79,26 @@ namespace DBMSCourse.Controllers
             }
         }
 
+        [HttpPost]
+        public JsonResult UpdateStudentScore(int sectionId, float score)
+        {
+            try
+            {
+                var report = _overallReportRepository.GetOverallReportBySectionId(sectionId);
+                if (report == null)
+                {
+                    return Json(new { success = false, message = "No report found for the given sectionId." });
+                }
+                report.KnowledgeCheckScore = Convert.ToDecimal(score);
+                _overallReportRepository.UpdateOverallReportBySectionId(sectionId, report);
+
+                return Json(new { success = true, message = "Score updated successfully." });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = $"Error: {ex.Message}" });
+            }
+        }
     }
 
     public class EvaluationRequest

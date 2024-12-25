@@ -27,9 +27,13 @@ namespace DBMSCourse.Repositories
         public void UpdateOverallReportBySectionId(int? sectionId, OverallReport updatedReport)
         {
             var reportToUpdate = _dbContext.OverallReport.FirstOrDefault(s => s.SectionId == sectionId);
+
             reportToUpdate.QuizScore = updatedReport?.QuizScore ?? reportToUpdate.QuizScore;
             reportToUpdate.KnowledgeCheckScore = updatedReport?.KnowledgeCheckScore ?? reportToUpdate.KnowledgeCheckScore;
-            reportToUpdate.SectionOverallScore = updatedReport?.SectionOverallScore ?? reportToUpdate.SectionOverallScore;
+            
+            decimal? overallScore = (reportToUpdate.QuizScore * Convert.ToDecimal(0.3)) + (reportToUpdate.KnowledgeCheckScore * Convert.ToDecimal(0.7));
+
+            reportToUpdate.SectionOverallScore = overallScore;
 
             _dbContext.SaveChanges();
         }

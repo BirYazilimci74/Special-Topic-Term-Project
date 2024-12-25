@@ -44,6 +44,12 @@ namespace DBMSCourse
                 url: "{controller}/{action}/{id}",
                 defaults: new { controller = "CheckStudentInfoPage", action = "CheckStudentInfoPage", id = UrlParameter.Optional }
             );
+            
+            routes.MapRoute(
+                name: "CheckStudentInfoPageUpdateStudentScore",
+                url: "{controller}/{action}/{id}",
+                defaults: new { controller = "CheckStudentInfoPage", action = "UpdateStudentScore", id = UrlParameter.Optional }
+            );
 
             routes.MapRoute(
                 name: "CheckStudentInfoPageSubmitStudentInput",
