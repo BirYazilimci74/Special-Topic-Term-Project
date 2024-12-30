@@ -12,7 +12,6 @@ namespace DBMSCourse.Models
         public int SectionId { get; set; }
         public string SectionName { get; set; }
         public string DetailedInfo { get; set; }
-        public int NumberOfCorrectAnswers { get; set; }
     }
 
 }
